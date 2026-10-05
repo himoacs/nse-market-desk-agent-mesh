@@ -1,0 +1,6 @@
+kind: toolset
+name: nse_publishing
+description: >-
+  Publishing tool for the NSE desk Briefing Writer: renders a markdown note
+  into print-ready HTML (desk styling, tables, chart PNGs embedded as data
+  URIs) so SAM's html_to_pdf can turn it into a PDF.

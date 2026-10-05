@@ -1,0 +1,28 @@
+kind: manifest
+name: nse-market-desk
+description: >-
+  NSE Market Desk agent mesh on a dedicated SAM Desktop instance
+  (SAM_HOME=~/sam-homes/nse-desk; apply with scripts/bootstrap.sh)
+target:
+  name: desktop
+resources:
+  models:
+    - general
+    - planning
+    - nse_sonnet
+  toolsets:
+    - nse_analytics
+    - nse_publishing
+  skills:
+    - nse-analysis-methodology
+    - nse-chart-styles
+    - nse-briefing-templates
+  connectors:
+    - nse_bhavcopy
+    - nse_cm_market
+  agents:
+    - nse_market_data
+    - nse_market_analyst
+    - nse_chart_studio
+    - nse_briefing_writer
+    - nse_desk_head

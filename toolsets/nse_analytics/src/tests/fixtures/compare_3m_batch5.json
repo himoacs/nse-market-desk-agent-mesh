@@ -1,0 +1,13 @@
+{
+ "jsonrpc": "2.0",
+ "id": 2,
+ "result": {
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"from_date\":\"2026-07-05\",\"to_date\":\"2026-10-05\",\"months\":3,\"stocks\":[{\"symbol\":\"ETERNAL\",\"start_price\":283.4,\"end_price\":313.9,\"return_pct\":10.76,\"max_drawdown\":8.39,\"trading_days\":63},{\"symbol\":\"TITAN\",\"start_price\":4484.4,\"end_price\":4515.7,\"return_pct\":0.7,\"max_drawdown\":12.64,\"trading_days\":63},{\"symbol\":\"ADANIPORTS\",\"start_price\":1864.4,\"end_price\":1737.8,\"return_pct\":-6.79,\"max_drawdown\":14.55,\"trading_days\":63},{\"symbol\":\"GRASIM\",\"start_price\":3213.0,\"end_price\":2962.0,\"return_pct\":-7.81,\"max_drawdown\":12.38,\"trading_days\":63},{\"symbol\":\"ULTRACEMCO\",\"start_price\":11661.0,\"end_price\":10710.0,\"return_pct\":-8.16,\"max_drawdown\":12.25,\"trading_days\":63},{\"symbol\":\"LT\",\"start_price\":4041.0,\"end_price\":3693.4,\"return_pct\":-8.6,\"max_drawdown\":10.33,\"trading_days\":63},{\"symbol\":\"INDIGO\",\"start_price\":5408.5,\"end_price\":4929.9,\"return_pct\":-8.85,\"max_drawdown\":12.48,\"trading_days\":63},{\"symbol\":\"BHARTIARTL\",\"start_price\":1925.7,\"end_price\":1741.1,\"return_pct\":-9.59,\"max_drawdown\":12.6,\"trading_days\":63},{\"symbol\":\"BEL\",\"start_price\":425.55,\"end_price\":383.1,\"return_pct\":-9.98,\"max_drawdown\":10.02,\"trading_days\":63},{\"symbol\":\"TRENT\",\"start_price\":3343.8,\"end_price\":2580.0,\"return_pct\":-22.84,\"max_drawdown\":22.84,\"trading_days\":63}],\"best_performer\":\"ETERNAL\",\"worst_performer\":\"TRENT\"}"
+   }
+  ],
+  "isError": false
+ }
+}

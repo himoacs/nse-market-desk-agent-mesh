@@ -1,0 +1,13 @@
+{
+ "jsonrpc": "2.0",
+ "id": 2,
+ "result": {
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"from_date\":\"2026-07-05\",\"to_date\":\"2026-10-05\",\"months\":3,\"stocks\":[{\"symbol\":\"SUNPHARMA\",\"start_price\":1912.8,\"end_price\":1801.0,\"return_pct\":-5.84,\"max_drawdown\":10.0,\"trading_days\":63},{\"symbol\":\"APOLLOHOSP\",\"start_price\":8888.5,\"end_price\":8133.5,\"return_pct\":-8.49,\"max_drawdown\":10.32,\"trading_days\":63},{\"symbol\":\"CIPLA\",\"start_price\":1472.3,\"end_price\":1344.0,\"return_pct\":-8.71,\"max_drawdown\":9.0,\"trading_days\":63},{\"symbol\":\"ITC\",\"start_price\":288.25,\"end_price\":255.9,\"return_pct\":-11.22,\"max_drawdown\":11.59,\"trading_days\":63},{\"symbol\":\"NESTLEIND\",\"start_price\":1473.7,\"end_price\":1307.7,\"return_pct\":-11.26,\"max_drawdown\":15.08,\"trading_days\":63},{\"symbol\":\"DRREDDY\",\"start_price\":1367.9,\"end_price\":1206.2,\"return_pct\":-11.82,\"max_drawdown\":16.98,\"trading_days\":63},{\"symbol\":\"TATACONSUM\",\"start_price\":1117.9,\"end_price\":957.0,\"return_pct\":-14.39,\"max_drawdown\":15.6,\"trading_days\":63},{\"symbol\":\"HINDUNILVR\",\"start_price\":2202.0,\"end_price\":1836.0,\"return_pct\":-16.62,\"max_drawdown\":16.88,\"trading_days\":63},{\"symbol\":\"MAXHEALTH\",\"start_price\":1132.5,\"end_price\":940.95,\"return_pct\":-16.91,\"max_drawdown\":17.9,\"trading_days\":63},{\"symbol\":\"TMPV\",\"start_price\":347.05,\"end_price\":279.4,\"return_pct\":-19.49,\"max_drawdown\":20.13,\"trading_days\":63}],\"best_performer\":\"SUNPHARMA\",\"worst_performer\":\"TMPV\"}"
+   }
+  ],
+  "isError": false
+ }
+}

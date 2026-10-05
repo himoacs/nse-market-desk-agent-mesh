@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nse-publishing-tools"
+version = "0.1.0"
+description = "Render NSE market desk notes (markdown + charts) to print-ready HTML for SAM's html_to_pdf"
+requires-python = ">=3.10"
+# Pure-Python dependencies only, so the bundle has no native wheels to match.
+dependencies = [
+    "sam-tool-sdk>=0.1,<0.2",
+    "markdown>=3.5,<4",
+]
+
+[project.scripts]
+render_note_html = "nse_publishing.tools:cli_render_note_html"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nse_publishing"]

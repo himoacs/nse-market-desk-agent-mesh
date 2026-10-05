@@ -1,0 +1,220 @@
+[
+ {
+  "name": "cm_get_sme_stocks",
+  "description": "Get latest live data for NSE SME (Small & Medium Enterprises) stocks (series: SM, ST).\nReturns symbol, LTP, open, high, low, change, % change, volume, 52w range.\nData refreshes every 1 minute.\n\nDisclaimer: Information/Data made available through the NSEIL MCP server is for informational and educational purposes only and does not constitute investment advice or recommendation. NSEIL is not responsible for any AI generated Output or predictions.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "limit": {
+     "type": "integer",
+     "description": "Max stocks to return (default 100, max 500). Pass 0 for default."
+    },
+    "symbolFilter": {
+     "type": "string",
+     "description": "Symbol prefix filter. Empty string for all SME stocks."
+    }
+   },
+   "required": [
+    "limit",
+    "symbolFilter"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "cm_get_live_market_data",
+  "description": "Get live NSE market data for a specific variation type.\nValid index values:\n  - gainers : top gaining stocks\n  - loosers : top losing stocks\nData refreshes every 5 minutes.\n\nSEBI Disclaimer: For educational and research purposes only. Not investment advice. Consult a SEBI-registered advisor before investing.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "index": {
+     "type": "string",
+     "description": "Variation type: 'gainers' or 'loosers'"
+    }
+   },
+   "required": [
+    "index"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "cm_get_equity_stocks",
+  "description": "Get latest live data for NSE Capital Market EQUITY stocks (series: EQ, BE, BL, BT, IL, IQ).\nReturns symbol, LTP, open, high, low, change, % change, volume, 52w range.\nUse limit to cap results. Use symbolFilter for prefix search (e.g. \"RELI\" \u2192 RELIANCE).\nData refreshes every 1 minute.\n\nDisclaimer: Information/Data made available through the NSEIL MCP server is for informational and educational purposes only and does not constitute investment advice or recommendation. NSEIL is not responsible for any AI generated Output or predictions.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "limit": {
+     "type": "integer",
+     "description": "Max stocks to return (default 100, max 500). Pass 0 for default."
+    },
+    "symbolFilter": {
+     "type": "string",
+     "description": "Symbol prefix filter (e.g. 'RELI'). Empty string for all equity stocks."
+    }
+   },
+   "required": [
+    "limit",
+    "symbolFilter"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "nse_get_losers",
+  "description": "Get top N NSE stocks by % loss, flattened across all indices and sorted ascending.\nIdeal for risk alerts \u2014 e.g., \"flag biggest intraday losers\".\n\n\nSEBI Disclaimer: For educational and research purposes only. Not investment advice. Past performance is not indicative of future results. Consult a SEBI-registered advisor before investing.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "limit": {
+     "type": "integer",
+     "description": "Max stocks to return (default 10, max 50). Pass 0 for default."
+    }
+   },
+   "required": [
+    "limit"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "cm_get_call_auction_stocks",
+  "description": "Get latest live data for NSE Call Auction session stocks (series: CA, CB).\nReturns symbol, LTP, open, high, low, change, % change, volume.\nData refreshes every 1 minute.\n\nDisclaimer: Information/Data made available through the NSEIL MCP server is for informational and educational purposes only and does not constitute investment advice or recommendation. NSEIL is not responsible for any AI generated Output or predictions.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "limit": {
+     "type": "integer",
+     "description": "Max stocks to return (default 100, max 500). Pass 0 for default."
+    },
+    "symbolFilter": {
+     "type": "string",
+     "description": "Symbol prefix filter. Empty string for all call auction stocks."
+    }
+   },
+   "required": [
+    "limit",
+    "symbolFilter"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "cm_get_bond_stocks",
+  "description": "Get latest live data for NSE BONDS / Debt instruments (all series not classified as equity, SME, or call auction \u2014 e.g. N1-N9, NE, NF, NU, Z1-Z5, ZA, ZP, ZU, GB, SG, TB etc.).\nReturns symbol, LTP, preClosePrice, change, % change, 52w range.\nData refreshes every 1 minute.\n\nDisclaimer: Information/Data made available through the NSEIL MCP server is for informational and educational purposes only and does not constitute investment advice or recommendation. NSEIL is not responsible for any AI generated Output or predictions.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "limit": {
+     "type": "integer",
+     "description": "Max stocks to return (default 100, max 500). Pass 0 for default."
+    },
+    "symbolFilter": {
+     "type": "string",
+     "description": "Symbol prefix filter. Empty string for all bonds."
+    }
+   },
+   "required": [
+    "limit",
+    "symbolFilter"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "cm_get_live_gainers",
+  "description": "Returns RAW NSE gainers data grouped by index segments (NIFTY, BANKNIFTY, NIFTYNEXT50, allSec, etc.).\nNOT sorted by % change. NOT suitable for \"top gainers today\" questions.\nUse nse_get_market_movers instead for sorted top gainers/losers rankings.\nUse this only if you need the full raw segment breakdown from NSE.\n\nSEBI Disclaimer: For educational and research purposes only. Not investment advice. Past performance is not indicative of future results. Consult a SEBI-registered advisor before investing.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {},
+   "required": [],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "nse_get_gainers",
+  "description": "Get top N NSE stocks by % gain, flattened across all indices and sorted descending.\nIdeal for dashboard display \u2014 e.g., \"show today's top 10 gainers\".\n\nSEBI Disclaimer: For educational and research purposes only. Not investment advice. Past performance is not indicative of future results. Consult a SEBI-registered advisor before investing.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "limit": {
+     "type": "integer",
+     "description": "Max stocks to return (default 10, max 50). Pass 0 for default."
+    }
+   },
+   "required": [
+    "limit"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "cm_get_data_status",
+  "description": "Check freshness of NSE live market data.\nShows when gainers and losers data was last crawled from NSE.\nUse this to verify data is up-to-date before querying.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {},
+   "required": [],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "cm_get_live_losers",
+  "description": "Returns RAW NSE losers data grouped by index segments (NIFTY, BANKNIFTY, NIFTYNEXT50, allSec, etc.).\nNOT sorted by % change. NOT suitable for \"top losers today\" questions.\nUse nse_get_market_movers instead for sorted top gainers/losers rankings.\nUse this only if you need the full raw segment breakdown from NSE.\n\nSEBI Disclaimer: For educational and research purposes only. Not investment advice. Past performance is not indicative of future results. Consult a SEBI-registered advisor before investing.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {},
+   "required": [],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "cm_get_stock_quote",
+  "description": "Get latest live quote for a specific NSE CM stock by exact symbol.\nWorks for any segment (equity, SME, bonds, call auction).\nReturns full price data: LTP, open, high, low, change, % change, volume, 52w range, series, latestTimestamp.\n\nDisclaimer: Information/Data made available through the NSEIL MCP server is for informational and educational purposes only and does not constitute investment advice or recommendation. NSEIL is not responsible for any AI generated Output or predictions.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "symbol": {
+     "type": "string",
+     "description": "Exact NSE symbol (e.g. 'RELIANCE', 'TCS', 'INFY', '1048IIFL27')"
+    }
+   },
+   "required": [
+    "symbol"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "nse_get_market_movers",
+  "description": "PRIMARY TOOL for: \"What are the top gainers today?\", \"top losers today?\", \"market movers\", \"best/worst performing stocks\", \"biggest gainers/losers\".\n\nReturns top N gainers (sorted by highest % gain) and top N losers (sorted by biggest % loss), from all NSE securities by default or filtered to a specific index.\n\nindexName \u2014 leave NULL or empty for ALL securities (broadest view, recommended default):\n  null / \"\"        \u2014 All NSE-listed securities (allSec, ~1500+ stocks)\n  \"NIFTY\"          \u2014 NIFTY 50 stocks only\n  \"BANKNIFTY\"      \u2014 Bank NIFTY stocks only\n  \"NIFTYNEXT50\"    \u2014 NIFTY Next 50 stocks only\n\nWhen user asks \"top gainers/losers today\" WITHOUT specifying an index: pass indexName=null or \"\".\nOnly pass NIFTY/BANKNIFTY/NIFTYNEXT50 if user explicitly asks for that specific index.\n\nFields: symbol, series, ltp, prev_price, net_price, perChange, trade_quantity, turnover.\n\nSEBI Disclaimer: For educational and research purposes only. Not investment advice. Past performance is not indicative of future results. Consult a SEBI-registered advisor before investing.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "indexName": {
+     "type": "string",
+     "description": "Index filter: null or empty for ALL securities (default), or NIFTY, BANKNIFTY, NIFTYNEXT50"
+    },
+    "limit": {
+     "type": "integer",
+     "description": "Max stocks per direction (default 10, max 50). Pass 0 for default."
+    }
+   },
+   "required": [
+    "indexName",
+    "limit"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "cm_get_allstocks_status",
+  "description": "Check freshness of NSE allstocks data cache.\nShows when last crawled, whether data is available, and segment-wise stock counts.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {},
+   "required": [],
+   "additionalProperties": false
+  }
+ }
+]

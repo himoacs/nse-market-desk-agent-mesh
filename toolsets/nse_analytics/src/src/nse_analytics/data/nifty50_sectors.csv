@@ -1,0 +1,51 @@
+symbol,company,desk_sector,nse_industry
+AXISBANK,Axis Bank Ltd.,Banks,Financial Services
+HDFCBANK,HDFC Bank Ltd.,Banks,Financial Services
+ICICIBANK,ICICI Bank Ltd.,Banks,Financial Services
+KOTAKBANK,Kotak Mahindra Bank Ltd.,Banks,Financial Services
+SBIN,State Bank of India,Banks,Financial Services
+BAJAJFINSV,Bajaj Finserv Ltd.,Financials ex-Banks,Financial Services
+BAJFINANCE,Bajaj Finance Ltd.,Financials ex-Banks,Financial Services
+BSE,BSE Ltd.,Financials ex-Banks,Financial Services
+HDFCLIFE,HDFC Life Insurance Company Ltd.,Financials ex-Banks,Financial Services
+JIOFIN,Jio Financial Services Ltd.,Financials ex-Banks,Financial Services
+SBILIFE,SBI Life Insurance Company Ltd.,Financials ex-Banks,Financial Services
+SHRIRAMFIN,Shriram Finance Ltd.,Financials ex-Banks,Financial Services
+HCLTECH,HCL Technologies Ltd.,IT,Information Technology
+INFY,Infosys Ltd.,IT,Information Technology
+TCS,Tata Consultancy Services Ltd.,IT,Information Technology
+TECHM,Tech Mahindra Ltd.,IT,Information Technology
+BAJAJ-AUTO,Bajaj Auto Ltd.,Auto,Automobile and Auto Components
+EICHERMOT,Eicher Motors Ltd.,Auto,Automobile and Auto Components
+M&M,Mahindra & Mahindra Ltd.,Auto,Automobile and Auto Components
+MARUTI,Maruti Suzuki India Ltd.,Auto,Automobile and Auto Components
+TMPV,Tata Motors Passenger Vehicles Ltd.,Auto,Automobile and Auto Components
+APOLLOHOSP,Apollo Hospitals Enterprise Ltd.,Pharma & Healthcare,Healthcare
+CIPLA,Cipla Ltd.,Pharma & Healthcare,Healthcare
+DRREDDY,Dr. Reddy's Laboratories Ltd.,Pharma & Healthcare,Healthcare
+MAXHEALTH,Max Healthcare Institute Ltd.,Pharma & Healthcare,Healthcare
+SUNPHARMA,Sun Pharmaceutical Industries Ltd.,Pharma & Healthcare,Healthcare
+HINDUNILVR,Hindustan Unilever Ltd.,FMCG,Fast Moving Consumer Goods
+ITC,ITC Ltd.,FMCG,Fast Moving Consumer Goods
+NESTLEIND,Nestle India Ltd.,FMCG,Fast Moving Consumer Goods
+TATACONSUM,Tata Consumer Products Ltd.,FMCG,Fast Moving Consumer Goods
+ADANIENT,Adani Enterprises Ltd.,Metals & Mining,Metals & Mining
+HINDALCO,Hindalco Industries Ltd.,Metals & Mining,Metals & Mining
+JSWSTEEL,JSW Steel Ltd.,Metals & Mining,Metals & Mining
+TATASTEEL,Tata Steel Ltd.,Metals & Mining,Metals & Mining
+COALINDIA,Coal India Ltd.,Energy & Power,Oil Gas & Consumable Fuels
+NTPC,NTPC Ltd.,Energy & Power,Power
+ONGC,Oil & Natural Gas Corporation Ltd.,Energy & Power,Oil Gas & Consumable Fuels
+POWERGRID,Power Grid Corporation of India Ltd.,Energy & Power,Power
+RELIANCE,Reliance Industries Ltd.,Energy & Power,Oil Gas & Consumable Fuels
+ASIANPAINT,Asian Paints Ltd.,Consumer,Consumer Durables
+ETERNAL,Eternal Ltd.,Consumer,Consumer Services
+TITAN,Titan Company Ltd.,Consumer,Consumer Durables
+TRENT,Trent Ltd.,Consumer,Consumer Services
+ADANIPORTS,Adani Ports and Special Economic Zone Ltd.,Infra & Industrials,Services
+BEL,Bharat Electronics Ltd.,Infra & Industrials,Capital Goods
+GRASIM,Grasim Industries Ltd.,Infra & Industrials,Construction Materials
+INDIGO,InterGlobe Aviation Ltd.,Infra & Industrials,Services
+LT,Larsen & Toubro Ltd.,Infra & Industrials,Construction
+ULTRACEMCO,UltraTech Cement Ltd.,Infra & Industrials,Construction Materials
+BHARTIARTL,Bharti Airtel Ltd.,Telecom,Telecommunication

@@ -1,0 +1,13 @@
+{
+ "jsonrpc": "2.0",
+ "id": 2,
+ "result": {
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"from_date\":\"2026-09-05\",\"to_date\":\"2026-10-05\",\"months\":1,\"stocks\":[{\"symbol\":\"HDFCBANK\",\"start_price\":710.5,\"end_price\":721.2,\"return_pct\":1.51,\"max_drawdown\":4.16,\"trading_days\":18},{\"symbol\":\"HDFCLIFE\",\"start_price\":533.2,\"end_price\":534.2,\"return_pct\":0.19,\"max_drawdown\":7.18,\"trading_days\":18},{\"symbol\":\"KOTAKBANK\",\"start_price\":422.1,\"end_price\":418.35,\"return_pct\":-0.89,\"max_drawdown\":4.87,\"trading_days\":18},{\"symbol\":\"AXISBANK\",\"start_price\":1266.0,\"end_price\":1217.1,\"return_pct\":-3.86,\"max_drawdown\":6.28,\"trading_days\":18},{\"symbol\":\"SBIN\",\"start_price\":1005.9,\"end_price\":954.1,\"return_pct\":-5.15,\"max_drawdown\":5.51,\"trading_days\":18},{\"symbol\":\"ICICIBANK\",\"start_price\":1427.5,\"end_price\":1310.6,\"return_pct\":-8.19,\"max_drawdown\":9.48,\"trading_days\":18},{\"symbol\":\"JIOFIN\",\"start_price\":234.4,\"end_price\":212.5,\"return_pct\":-9.34,\"max_drawdown\":9.34,\"trading_days\":18},{\"symbol\":\"BAJFINANCE\",\"start_price\":1060.0,\"end_price\":948.3,\"return_pct\":-10.54,\"max_drawdown\":10.54,\"trading_days\":18},{\"symbol\":\"BAJAJFINSV\",\"start_price\":1938.6,\"end_price\":1732.6,\"return_pct\":-10.63,\"max_drawdown\":10.8,\"trading_days\":18},{\"symbol\":\"BSE\",\"start_price\":3446.2,\"end_price\":3046.0,\"return_pct\":-11.61,\"max_drawdown\":11.61,\"trading_days\":18}],\"best_performer\":\"HDFCBANK\",\"worst_performer\":\"BSE\"}"
+   }
+  ],
+  "isError": false
+ }
+}

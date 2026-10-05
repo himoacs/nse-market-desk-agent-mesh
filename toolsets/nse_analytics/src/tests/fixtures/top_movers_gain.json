@@ -1,0 +1,13 @@
+{
+ "jsonrpc": "2.0",
+ "id": 2,
+ "result": {
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"date\":\"2026-10-01\",\"requested_date\":\"2026-10-05\",\"direction\":\"gainers\",\"count\":10,\"stocks\":[{\"volume\":655464953,\"close\":53.88,\"symbol\":\"MONEYVIEW\",\"high\":62.0,\"pct_change\":58.47,\"low\":50.27,\"prev_close\":34.0},{\"volume\":1328,\"close\":0.2,\"symbol\":\"PARTY-RE\",\"high\":0.2,\"pct_change\":33.33,\"low\":0.2,\"prev_close\":0.15},{\"volume\":14572000,\"close\":142.73,\"symbol\":\"EDELWEISS\",\"high\":142.73,\"pct_change\":20.96,\"low\":142.73,\"prev_close\":118.0},{\"volume\":112524,\"close\":74.18,\"symbol\":\"SMLT\",\"high\":74.18,\"pct_change\":19.99,\"low\":66.0,\"prev_close\":61.82},{\"volume\":6,\"close\":997.0,\"symbol\":\"965SCL25F\",\"high\":997.0,\"pct_change\":17.57,\"low\":997.0,\"prev_close\":848.0},{\"volume\":244539,\"close\":93.67,\"symbol\":\"XELPMOC\",\"high\":95.0,\"pct_change\":16.74,\"low\":79.55,\"prev_close\":80.24},{\"volume\":43662,\"close\":776.7,\"symbol\":\"RVTH\",\"high\":803.75,\"pct_change\":15.96,\"low\":680.0,\"prev_close\":669.8},{\"volume\":8751936,\"close\":1513.1,\"symbol\":\"MOLBIO\",\"high\":1564.3,\"pct_change\":15.6,\"low\":1312.1,\"prev_close\":1308.9},{\"volume\":15600,\"close\":16.05,\"symbol\":\"CELLPOINT\",\"high\":16.65,\"pct_change\":15.05,\"low\":14.5,\"prev_close\":13.95},{\"volume\":2325000,\"close\":615.0,\"symbol\":\"NIRLON\",\"high\":615.0,\"pct_change\":14.41,\"low\":615.0,\"prev_close\":537.55}]}"
+   }
+  ],
+  "isError": false
+ }
+}

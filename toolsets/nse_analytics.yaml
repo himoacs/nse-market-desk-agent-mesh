@@ -1,0 +1,8 @@
+kind: toolset
+name: nse_analytics
+description: >-
+  Deterministic NSE market desk analytics for the Market Analyst: NIFTY 50
+  sector mapping and compare_stocks batches, sector rotation (relative
+  strength quadrants) and momentum ranking, advance/decline breadth trend,
+  and live intraday sector tilt. Reads raw NSE MCP responses saved as
+  artifacts and writes CSV artifacts. Standard library only.

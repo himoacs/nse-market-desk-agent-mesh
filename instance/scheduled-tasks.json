@@ -1,0 +1,26 @@
+[
+  {
+    "name": "NSE pre-market note",
+    "description": "Weekday pre-market note from end-of-day NSE data",
+    "scheduleType": "cron",
+    "scheduleExpression": "30 8 * * 1-5",
+    "timezone": "Asia/Kolkata",
+    "targetAgent": "nse_briefing_writer",
+    "taskMessage": "Write today's pre-market note.",
+    "enabled": true,
+    "timeoutSeconds": 1200,
+    "maxRetries": 1
+  },
+  {
+    "name": "NSE EOD wrap",
+    "description": "Weekday end-of-day wrap from the final NSE live board",
+    "scheduleType": "cron",
+    "scheduleExpression": "0 16 * * 1-5",
+    "timezone": "Asia/Kolkata",
+    "targetAgent": "nse_briefing_writer",
+    "taskMessage": "Write today's EOD wrap.",
+    "enabled": true,
+    "timeoutSeconds": 1200,
+    "maxRetries": 1
+  }
+]

@@ -1,0 +1,13 @@
+{
+ "jsonrpc": "2.0",
+ "id": 2,
+ "result": {
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"from_date\":\"2026-09-05\",\"to_date\":\"2026-10-05\",\"months\":1,\"stocks\":[{\"symbol\":\"SBILIFE\",\"start_price\":1732.0,\"end_price\":1721.6,\"return_pct\":-0.6,\"max_drawdown\":4.5,\"trading_days\":18},{\"symbol\":\"TECHM\",\"start_price\":1564.0,\"end_price\":1533.0,\"return_pct\":-1.98,\"max_drawdown\":4.15,\"trading_days\":18},{\"symbol\":\"HCLTECH\",\"start_price\":1282.8,\"end_price\":1243.1,\"return_pct\":-3.09,\"max_drawdown\":5.98,\"trading_days\":18},{\"symbol\":\"INFY\",\"start_price\":1087.5,\"end_price\":1035.0,\"return_pct\":-4.83,\"max_drawdown\":8.59,\"trading_days\":18},{\"symbol\":\"TCS\",\"start_price\":2270.0,\"end_price\":2075.0,\"return_pct\":-8.59,\"max_drawdown\":10.47,\"trading_days\":18},{\"symbol\":\"SHRIRAMFIN\",\"start_price\":1037.0,\"end_price\":945.0,\"return_pct\":-8.87,\"max_drawdown\":8.96,\"trading_days\":18},{\"symbol\":\"M&M\",\"start_price\":3160.0,\"end_price\":2860.0,\"return_pct\":-9.49,\"max_drawdown\":9.49,\"trading_days\":18},{\"symbol\":\"EICHERMOT\",\"start_price\":7672.0,\"end_price\":6920.0,\"return_pct\":-9.8,\"max_drawdown\":10.68,\"trading_days\":18},{\"symbol\":\"MARUTI\",\"start_price\":12760.0,\"end_price\":11386.0,\"return_pct\":-10.77,\"max_drawdown\":10.77,\"trading_days\":18},{\"symbol\":\"BAJAJ-AUTO\",\"start_price\":11800.0,\"end_price\":10045.0,\"return_pct\":-14.87,\"max_drawdown\":15.45,\"trading_days\":18}],\"best_performer\":\"SBILIFE\",\"worst_performer\":\"BAJAJ-AUTO\"}"
+   }
+  ],
+  "isError": false
+ }
+}

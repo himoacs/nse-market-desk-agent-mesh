@@ -1,0 +1,14 @@
+kind: model
+name: planning
+description: >-
+  The SAM instance's built-in planning model (used by SAM's Builder and chat titles), set to the same LLM as the desk agents so a fresh instance needs no onboarding screen. Configured from .env.
+spec:
+  alias: planning
+  provider: ${LLM_PROVIDER, custom}
+  modelName: ${LLM_MODEL_NAME}
+  apiBase: ${LLM_API_BASE}
+  authConfig:
+    type: apikey
+    api_key: ${LLM_API_KEY}
+  modelParams:
+    cache_strategy: 5m

@@ -1,0 +1,9 @@
+version: 1
+# Toolset build: `sam config apply` runs build.sh (pip install --target
+# dist/<os>-<arch>/python .) once for this src/, dropping the
+# [project.scripts] console script at python/bin/<name>.
+tools:
+  render_note_html:
+    runtime: python
+    executable: python/bin/render_note_html
+    timeout_seconds: 60

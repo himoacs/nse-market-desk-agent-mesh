@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nse-analytics-tools"
+version = "0.1.0"
+description = "NSE market desk analytics (sector rotation, breadth, live tilt) for SAM STR"
+requires-python = ">=3.10"
+# Standard library only, so the bundle has no native wheels to match.
+dependencies = [
+    "sam-tool-sdk>=0.1,<0.2",
+]
+
+# One console script per tool. The build drops each at python/bin/<name>,
+# matching the executables in manifest.yaml.
+[project.scripts]
+get_nifty50_universe = "nse_analytics.tools:cli_universe"
+sector_rotation = "nse_analytics.tools:cli_sector_rotation"
+breadth_trend = "nse_analytics.tools:cli_breadth_trend"
+live_sector_tilt = "nse_analytics.tools:cli_live_sector_tilt"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nse_analytics"]

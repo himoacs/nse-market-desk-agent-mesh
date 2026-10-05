@@ -1,0 +1,23 @@
+# Secrets (LiteLLM endpoint + key). Copy .env.example to .env.
+.env
+*.env
+!.env.example
+
+# Added by sam config: per-toolset build cache and outputs.
+toolsets/*/.sam-cache/
+toolsets/*/dist/
+toolsets/*/src/vendor/
+skills/*/.sam-cache/
+skills/*/tools/*/dist/
+
+# Generated locally by `sam ai-assistance skill install` (SAM authoring docs)
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# OS / editor
+.DS_Store

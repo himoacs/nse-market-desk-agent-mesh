@@ -1,0 +1,5 @@
+{
+  "name": "NSE Market Desk",
+  "description": "Live NSE data, analysis, charts and briefings from the five-agent NSE desk mesh.",
+  "defaultAgent": "nse_desk_head"
+}

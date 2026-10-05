@@ -1,0 +1,13 @@
+{
+ "jsonrpc": "2.0",
+ "id": 2,
+ "result": {
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"date\":\"2026-10-01\",\"total_stocks\":3712,\"advances\":883,\"declines\":2714,\"unchanged\":115,\"ad_ratio\":0.33,\"total_volume\":5699843092}"
+   }
+  ],
+  "isError": false
+ }
+}

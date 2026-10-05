@@ -1,0 +1,14 @@
+kind: model
+name: nse_sonnet
+description: >-
+  LLM shared by all five NSE desk agents. Configured entirely from .env (LLM_PROVIDER, LLM_MODEL_NAME, LLM_API_BASE, LLM_API_KEY) so anyone can point the desk at their own provider.
+spec:
+  alias: nse_sonnet
+  provider: ${LLM_PROVIDER, custom}
+  modelName: ${LLM_MODEL_NAME}
+  apiBase: ${LLM_API_BASE}
+  authConfig:
+    type: apikey
+    api_key: ${LLM_API_KEY}
+  modelParams:
+    cache_strategy: 5m
