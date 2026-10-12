@@ -1,0 +1,14 @@
+kind: manifest
+name: nse-builtin-models
+description: >-
+  Optional. Points SAM's own built-in "general" and "planning" models (used by
+  SAM's Builder and for chat titles) at the same LLM as the desk. Not needed
+  for the desk agents, which use nse_sonnet. Overwrites those two models, so
+  skip it if your SAM already has them configured the way you want.
+  Apply with: scripts/bootstrap.py --builtin-models
+target:
+  name: desktop
+resources:
+  models:
+    - general
+    - planning

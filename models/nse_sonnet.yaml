@@ -6,7 +6,7 @@ spec:
   alias: nse_sonnet
   provider: ${LLM_PROVIDER, custom}
   modelName: ${LLM_MODEL_NAME}
-  apiBase: ${LLM_API_BASE}
+  apiBase: ${LLM_API_BASE:-}
   authConfig:
     type: apikey
     api_key: ${LLM_API_KEY}

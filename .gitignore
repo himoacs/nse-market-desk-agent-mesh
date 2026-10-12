@@ -1,4 +1,4 @@
-# Secrets (LiteLLM endpoint + key). Copy .env.example to .env.
+# Secrets (your LLM endpoint + key). Copy .env.example to .env.
 .env
 *.env
 !.env.example

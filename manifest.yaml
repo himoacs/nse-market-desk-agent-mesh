@@ -1,14 +1,12 @@
 kind: manifest
 name: nse-market-desk
 description: >-
-  NSE Market Desk agent mesh on a dedicated SAM Desktop instance
-  (SAM_HOME=~/sam-homes/nse-desk; apply with scripts/bootstrap.sh)
+  NSE Market Desk: five agents over the NSE MCP server. Apply with
+  scripts/bootstrap.py, or directly with: sam config apply --target desktop
 target:
   name: desktop
 resources:
   models:
-    - general
-    - planning
     - nse_sonnet
   toolsets:
     - nse_analytics

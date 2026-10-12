@@ -1,10 +1,19 @@
 # NSE Market Desk on Solace Agent Mesh
 
-A five-agent "market desk" for the Indian equity market, built on
-[Solace Agent Mesh](https://docs.solace.com/Agentic-AI/agent-mesh.htm) (SAM) and the official
-[NSE MCP server](https://www.nseindia.com/nse-mcp). Each agent is one YAML file. The agents find
-each other through agent cards on SAM's event broker and delegate work over A2A; there is no
-integration code between them. Everything is set up with the `sam` CLI, with no clicking in the UI.
+Build and run your own team of AI agents for the Indian stock market, on your own machine, in
+about ten minutes.
+
+Five small agents work together over [Solace Agent Mesh](https://docs.solace.com/Agentic-AI/agent-mesh.htm)
+(SAM), using the official [NSE MCP server](https://www.nseindia.com/nse-mcp) as their data source.
+Ask a question in plain English and the agents hand work to each other: one fetches live and
+end-of-day data from NSE, one calculates sector rotation and breadth, one draws charts, and one writes
+a pre-market note or end-of-day wrap as a PDF. Each agent is a single YAML file. They find each other
+through agent cards on SAM's event broker and delegate over A2A, with no integration code between them.
+
+<p align="center">
+  <img src="docs/sector-rotation-example.png" alt="Sector rotation chart drawn by the Chart Studio agent" width="640"><br>
+  <em>A chart drawn by the Chart Studio agent (NIFTY 50 sector rotation, data as of 1 Oct 2026)</em>
+</p>
 
 ```
 You ─► nse_desk_head (orchestrator)
@@ -14,192 +23,253 @@ You ─► nse_desk_head (orchestrator)
          └─► nse_briefing_writer ──► analyst, market data, chart studio  (+ nse_publishing, html_to_pdf)
 ```
 
-| Agent | Job | Tools |
+| Agent | What it does | Tools |
 |---|---|---|
-| `nse_desk_head` | Front door: routes questions, posts a plan and live progress, gives short numbers-first answers | peers only |
-| `nse_market_data` | The only agent that talks to NSE; fetches data and saves raw responses as artifacts | 2 NSE MCP connectors (21 tools) |
-| `nse_market_analyst` | Sector rotation (1M vs 3M quadrants), momentum, breadth trend, live sector tilt | `nse_analytics` toolset + `nse-analysis-methodology` skill |
-| `nse_chart_studio` | PNG charts in a fixed house style | `create_chart_from_plotly_config` + `nse-chart-styles` skill |
-| `nse_briefing_writer` | Pre-market note and end-of-day (EOD) wrap, in chat and as a PDF | `nse_publishing` toolset + `html_to_pdf` + `nse-briefing-templates` skill |
+| `nse_desk_head` | Front door: routes your question, posts a short plan and live progress, gives numbers-first answers | the other four agents |
+| `nse_market_data` | The only agent that talks to NSE: live movers and quotes, breadth, history, comparisons, corporate actions | 2 NSE MCP connectors (21 tools) |
+| `nse_market_analyst` | Sector rotation (1-month vs 3-month quadrants), momentum, breadth trend, live sector tilt | `nse_analytics` Python toolset + a methodology skill |
+| `nse_chart_studio` | PNG charts in one consistent style | built-in Plotly chart tool + a style skill |
+| `nse_briefing_writer` | Pre-market note and end-of-day wrap, in chat and as a PDF | `nse_publishing` toolset + `html_to_pdf` + a template skill |
 
-## What you need
+## Get started in 5 steps
 
-| Requirement | Notes |
-|---|---|
-| **SAM Desktop** app | Download from the Solace product portal: **https://products.solace.com/prods/Agent_Mesh** (login required). No portal access? Contact your Solace account team or [solace.com/support](https://solace.com/support). Installers: macOS `.dmg`, Windows `.msi`, Linux `.tar.gz`. |
-| **`sam` CLI** | From the same portal page. Put the binary on your `PATH` (e.g. `~/.local/bin/sam`), `chmod +x` it, and check `sam --version`. On macOS you may need `xattr -d com.apple.quarantine ~/.local/bin/sam` the first time. |
-| **An LLM API key** | Any OpenAI-compatible endpoint (e.g. a LiteLLM gateway) or a provider SAM supports. Use a strong tool-calling model (Claude Sonnet class or equivalent). **You configure this yourself in `.env`; see step 2.** |
-| **Python 3.10+ with `pip`** | `sam config apply` builds the two Python toolsets locally. |
-| **git** and network access to `mcp.nseindia.in` | The NSE MCP servers need no account or key. |
+1. [Download SAM Desktop and the `sam` CLI](#1-download-sam-desktop-and-the-sam-cli-free)
+2. [Clone this repo](#2-clone-this-repo)
+3. [Configure your model](#3-configure-your-model)
+4. [Apply the config to SAM](#4-apply-the-config-to-sam)
+5. [Try the sample prompts](#5-try-the-sample-prompts)
 
-Tested with SAM Desktop 2.325.2 and `sam` CLI 2.275.10 on macOS. The helper script that
-switches SAM instances (`scripts/sam-desktop.sh`) is macOS-only; everything else is the
-`sam` CLI plus Python and works on any OS.
+### 1. Download SAM Desktop and the `sam` CLI (free)
 
-## Quick start
+1. Go to **https://solace.com/products/agent-mesh/download/** and download Agent Mesh for your
+   operating system (macOS, Windows or Linux). It is free to download and try; the download page
+   describes it as free for individuals and for companies with under $25M annual revenue, so check the
+   page for the current terms.
+2. Install it and start **Solace Agent Mesh** once to make sure it opens. It bundles its own event
+   broker, so there is nothing else to install. Its web UI is served at `http://127.0.0.1:8800`.
+3. The download also includes the **`sam` command-line tool**, which this repo uses for all setup.
+   Put it on your `PATH` and check that it works:
 
-### 1. Install SAM and clone the repo
+   ```bash
+   sam --version
+   ```
 
-Install SAM Desktop and the `sam` CLI from the portal (see above), then:
+4. You also need **Python 3.10+** (`python3 --version`) with `pip` and internet access.
+   `sam config apply` builds two small Python toolsets on your machine and downloads their
+   dependencies from PyPI.
+
+Tested with SAM Desktop 2.325.2 and `sam` 2.275.10 on macOS. Windows and Linux should work with the
+same commands but are untested.
+
+> **Don't confuse it with `pip install solace-agent-mesh`.** That installs an older Python framework,
+> a different product with no desktop app and no `sam config apply`. This repo needs the desktop app
+> and CLI from the download page above.
+
+### 2. Clone this repo
 
 ```bash
 git clone https://github.com/himoacs/nse-market-desk-agent-mesh.git
 cd nse-market-desk-agent-mesh
 ```
 
-### 2. Configure your LLM
+### 3. Configure your model
+
+The agents need an LLM, and you supply your own. Copy the template and fill it in:
 
 ```bash
-cp .env.example .env
+cp .env.example .env          # Windows: copy .env.example .env
 ```
 
-Edit `.env`. It is gitignored; never commit it.
+Open `.env` in an editor. It is gitignored, so your key never gets committed.
 
-| Variable | Meaning | Example |
+| Variable | What to put | Example |
 |---|---|---|
-| `LLM_PROVIDER` | SAM model provider. `custom` = any OpenAI-compatible endpoint (tested). Other SAM providers: `openai`, `anthropic`, `azure_openai`, `bedrock`, `google_ai_studio`, `vertex_ai`, `ollama`. | `custom` |
-| `LLM_MODEL_NAME` | Model id as your endpoint names it. With `custom`, prefix it with the API format the endpoint speaks: `anthropic/<model>` or `openai/<model>`. | `anthropic/claude-sonnet-5-5` |
-| `LLM_API_BASE` | Base URL of your endpoint, **without** a trailing `/v1` | `https://litellm.mycompany.com` |
-| `LLM_API_KEY` | Your key | `sk-...` |
+| `LLM_PROVIDER` | `custom` for any OpenAI-compatible endpoint such as a LiteLLM gateway (the tested setup), or a SAM provider name such as `openai` or `anthropic` | `custom` |
+| `LLM_MODEL_NAME` | The model name. With `custom`, start it with the API format your endpoint speaks: `anthropic/<model>` or `openai/<model>`. With a built-in provider, use the plain model name | `anthropic/claude-sonnet-5-5` |
+| `LLM_API_BASE` | Your endpoint's base URL **without** a trailing `/v1`. Required for `custom`; for `openai`, `anthropic` and the other built-in providers, leave it empty or delete the line | `https://my-gateway.example.com` |
+| `LLM_API_KEY` | Your API key | `sk-...` |
 
-These values feed `models/nse_sonnet.yaml` (used by the desk agents) and SAM's own
-`general` / `planning` models (`models/general.yaml`, `models/planning.yaml`). Declaring the
-latter in config means a fresh SAM instance needs no onboarding screen.
+Which setup to use:
 
-Only the LiteLLM / OpenAI-compatible (`custom`) path has been tested end to end. If you use
-another provider, check that `sam config plan` resolves your variables and that the first
-test prompt (step 5) gets an answer.
+| Setup | Status |
+|---|---|
+| `custom` + an OpenAI-compatible gateway (e.g. LiteLLM) serving Claude Sonnet 5.5 | Tested end to end |
+| `custom` + an OpenAI-compatible gateway serving other models (`openai/<model>`) | Not tested |
+| `openai` or `anthropic` directly, with `LLM_API_BASE` left empty | SAM accepts this config (checked); not run end to end |
 
-### 3. Start a dedicated SAM instance
+Use a strong tool-calling model. The agents hand work to each other and call many tools, and small or
+weak models tend to stumble on that. See SAM's
+[model docs](https://docs.solace.com/Agent-Mesh/Framework/building/models/index.htm) for the
+providers it supports.
 
-SAM keeps all state (agents, connectors, models, chats, files, logs) in a *home* directory.
-Running the desk in its own home keeps it separate from anything else you have built in SAM.
+This sets `nse_sonnet`, the model all five desk agents use. SAM's own built-in `general` and `planning`
+models (used by SAM's Builder and for chat titles) are separate and are left alone by default. If you
+want them to use your LLM too, add `--builtin-models` in step 4. That overwrites those two models.
 
-**macOS:**
+### 4. Apply the config to SAM
 
-```bash
-scripts/sam-desktop.sh nse        # quits SAM if running, relaunches it with SAM_HOME=~/sam-homes/nse-desk
+1. **Start SAM Desktop** and wait until its chat screen appears.
+2. From the repo folder, run:
+
+   ```bash
+   python3 scripts/bootstrap.py          # Windows: python scripts\bootstrap.py
+   ```
+
+It usually takes under a minute and does everything through the `sam` CLI:
+
+- checks your `.env` and tells you if something is missing or still a placeholder;
+- finds the running SAM Desktop (no login needed) and, if that instance already has other agents of
+  yours, **asks before adding the desk next to them**. Nothing you already have is changed or deleted;
+- runs `sam config apply --target desktop` for everything in `manifest.yaml`: the model, two NSE
+  connectors, two Python toolsets (built locally), three skills and the five agents;
+- creates the **NSE Market Desk** chat project (default agent: `nse_desk_head`) and two **scheduled
+  tasks** (a pre-market note at 08:30 IST and an end-of-day wrap at 16:00 IST on weekdays) through
+  `sam api`, because `sam config` has no resource type for those. The schedules are created
+  **switched off**, so nothing calls your LLM on a timer until you turn them on.
+
+You should end with:
+
+```
+project  + NSE Market Desk (default agent nse_desk_head)
+schedule + NSE pre-market note: 30 8 * * 1-5 Asia/Kolkata -> nse_briefing_writer (disabled)
+schedule + NSE EOD wrap: 0 16 * * 1-5 Asia/Kolkata -> nse_briefing_writer (disabled)
+
+Done. In SAM Desktop open Projects > NSE Market Desk (or start a new chat) and try a prompt.
 ```
 
-The script also turns off SAM's Activity Monitor feature for this instance
-(`SAM_FEATURE_ACTIVITY_MONITOR=false`), so the mesh shows only the desk and SAM's Builder.
+It is safe to re-run after you edit any YAML. Options:
 
-**Windows / Linux:** start SAM Desktop with the environment variable
-`SAM_HOME=<some empty folder>` (and optionally `SAM_FEATURE_ACTIVITY_MONITOR=false`), then
-run step 4 with `--use-running-instance`. Or, on a fresh SAM install you don't mind
-dedicating to the desk, start SAM normally and pass `--use-running-instance`.
+| Flag | Effect |
+|---|---|
+| `--enable-schedules` | Switch the two scheduled tasks on (also possible on SAM's Schedules page) |
+| `--builtin-models` | Also point SAM's `general` / `planning` models at your LLM (overwrites them) |
+| `--remove-builtins` | Delete SAM's built-in Orchestrator and Activity Monitor agents; the Builder is kept |
+| `--yes` | Don't ask before adding the desk to an instance that has other agents |
+| `--skip-apply` | Only create/update the project and scheduled tasks |
 
-### 4. Apply the desk with the SAM CLI
+**Prefer to run the SAM CLI yourself?** The core of it is two commands, run from the repo folder:
 
 ```bash
-scripts/bootstrap.py --remove-builtins
-# Windows/Linux or a non-dedicated instance:  scripts/bootstrap.py --use-running-instance --remove-builtins
+sam config plan  --target desktop -v     # preview what would change; changes nothing
+sam config apply --target desktop        # apply manifest.yaml
 ```
 
-`bootstrap.py` does everything through the `sam` CLI:
+`--target desktop` finds the running SAM Desktop on its own. The project and schedules live in
+`instance/*.json` and are applied by `bootstrap.py` with `sam api`.
 
-1. Runs `sam config apply --target desktop` for every resource in `manifest.yaml`: 3 models,
-   2 NSE connectors, 2 Python toolsets (built locally), 3 skills and the 5 agents.
-2. Creates or updates the **"NSE Market Desk"** chat project (default agent `nse_desk_head`)
-   from `instance/project.json` via `sam api`. `sam config` has no resource kind for projects.
-3. Creates or updates two **scheduled tasks** from `instance/scheduled-tasks.json` via `sam api`:
-   a pre-market note at 08:30 IST and an EOD wrap at 16:00 IST on weekdays.
-4. With `--remove-builtins`: deletes SAM's built-in Orchestrator and Activity Monitor agents.
-   The Builder is kept. Leave the flag off to keep them; the Desk Head is the default chat
-   agent either way.
+One thing that looks alarming but isn't: `plan` and `apply` list SAM's built-in `Orchestrator` and
+`Activity Monitor` agents as `- delete`. They are only shown because they exist in SAM but not in this
+repo. `apply` never deletes anything unless you pass `--prune`, which you shouldn't need here.
 
-It is safe to re-run. By default it refuses to run unless the running SAM was launched with
-`~/sam-homes/nse-desk`, so it can't configure the wrong instance by accident.
+### 5. Try the sample prompts
 
-### 5. Try it
+In SAM Desktop, open **Projects → NSE Market Desk** and start a chat. The Desk Head is the default
+agent, and its welcome screen has one-click buttons for several of the prompts below. If you start a
+plain **New Chat** instead, pick `nse_desk_head` from the agent menu.
 
-Open SAM Desktop (`http://127.0.0.1:8800`), go to **Projects → NSE Market Desk** (or just start
-a new chat; the Desk Head is the default agent) and use the welcome-screen buttons, or type:
+Start with the quick ones, then work up:
 
-| Prompt | What happens | Typical time |
+| Try this | What the agents do | Typical time |
 |---|---|---|
-| What was NSE market breadth on the latest trading day? | Market Data, one NSE call | ~10s-1m |
-| How's the market right now? | Live movers + live sector tilt | ~1m15s |
-| Compare HDFC Bank, ICICI Bank and Kotak Mahindra Bank over 6 months, with a chart. | Market Data → Chart Studio | ~1m20s |
-| Which NIFTY 50 sectors are leading over 1 month vs 3 months? Show the rotation chart. | Analyst → Market Data (10 parallel NSE calls) → Python analytics → chart | ~2m10s |
-| Write tomorrow's pre-market note. | All five agents → 2-page PDF with 3 charts | ~6m30s |
-| Write today's EOD wrap. | Live sector tilt + leaders/laggards → PDF | ~3m |
+| Which agents do you have and what does each one do? | The Desk Head describes the team | ~10s |
+| What was NSE market breadth on the latest trading day? | Market Data, one NSE call | ~15s |
+| Live quote for Reliance | Market Data, live quote | ~20s |
+| Show the top 5 BANK NIFTY gainers and losers right now | Market Data, live movers | ~25s |
+| Any dividends, splits or bonuses for Reliance in the last year? | Market Data, corporate actions | ~20s |
+| How's the market right now? | Live movers plus live sector tilt (Market Data + Analyst) | ~30s-1m |
+| Compare HDFC Bank, ICICI Bank and Kotak Mahindra Bank over 6 months, with a chart. | Market Data → Chart Studio, returns vs drawdown chart | ~1.5m |
+| Which NIFTY 50 sectors are leading over 1 month vs 3 months? Show the rotation chart. | Analyst asks Market Data for 10 comparisons in parallel, a Python tool does the maths, Chart Studio draws the quadrant | ~2m |
+| Write today's EOD wrap. | Live sector tilt and leaders/laggards, written up and rendered to a PDF | ~3m |
+| Write tomorrow's pre-market note. | All five agents: breadth trend, sector rotation, momentum, movers, 3 charts, a 2-page PDF | ~6m |
+| Should I buy HDFC Bank now? | The desk declines to give advice and offers data instead | under 1m |
 
-More to try: "Live quote for Reliance", "Top 5 BANK NIFTY gainers and losers right now",
-"Where is Infosys relative to its 52-week range?", "Any dividends or splits for Reliance in the
-last year?", "How has market breadth trended over the last week?".
+What to look for:
 
-While a prompt runs, the chat shows the Desk Head's one-line plan and live status lines
-from whichever agent is working. Open the **Activity** panel with **Detail Mode** on to see
-the agents hand off to each other.
+- **Live progress.** For multi-step questions the Desk Head posts a one-line plan, and each agent
+  posts a short status line before every tool call or hand-off. Open the **Activity** panel with **Detail Mode** on to watch
+  the agents pass work to each other.
+- **Files.** Charts, CSVs and the finished PDF appear in the chat's **Files** panel.
+- **Market hours.** Live data covers the NSE session, 09:15-15:30 IST, Monday to Friday. Outside those
+  hours "right now" prompts answer with the last session and say so. NSE's live board also
+  sometimes lists fewer than five losers (or gainers) for an index.
+- **Speed and cost.** Times depend on your model and on NSE's servers, which sometimes hang; the
+  Market Data agent retries each failed call up to 3 times. The two briefing prompts make dozens of LLM
+  calls, noticeably more than a normal chat message, so try the quick prompts first.
+- **Not advice.** Everything is informational and educational. See [Data and terms](#data-and-terms).
 
-Live prompts ("right now", "today") are best during market hours, 09:15-15:30 IST. End-of-day
-data is the latest session NSE has published (usually the previous trading day until the
-evening).
+Command-line alternative: `sam task send "Live quote for Reliance" -a nse_market_data`
+
+## Make it your own
+
+Everything is plain YAML, so changing the desk is edit, then `python3 scripts/bootstrap.py`, then ask again:
+
+- **Change how an agent behaves.** Edit the `systemPrompt` in any file under `agents/`, or the
+  procedures in `skills/*/SKILL.md`, and re-apply.
+- **Try a different model.** Change `.env` and re-apply, or give one agent its own model with
+  `modelProvider` in its YAML.
+- **Add an agent.** Copy an agent file, give it a new `name`, list it under `agents:` in
+  `manifest.yaml`, and add it to the Desk Head's `allowList` so it can delegate to it. A natural
+  first one is a corporate-actions specialist built on the `get_corporate_actions` tool.
+- **Build one in the UI instead.** Chat with SAM's Builder agent to draft an agent, then bring it into
+  YAML with `sam config pull --target desktop -o some-folder`.
+- **Turn on the schedules.** `python3 scripts/bootstrap.py --enable-schedules`, then watch the runs on
+  SAM's Schedules page.
+- **Add stocks, sectors or indices.** The sector map is a small CSV; see below.
 
 ## How it works
 
-- **Data travels as files.** Market Data saves every raw NSE response as an artifact. The
-  Analyst's Python tools read those files and write CSVs. Chart Studio turns CSVs into PNGs.
-  The Briefing Writer writes the note once as markdown; `render_note_html` turns it into
-  styled HTML with the PNGs embedded, and `html_to_pdf` makes the PDF.
-- **Deterministic maths.** Returns, relative strength, quadrants and breadth regimes are
-  computed by the `nse_analytics` Python toolset, unit-tested on real NSE responses. The LLM
-  decides what to fetch and how to explain it, never the arithmetic.
+- **Data travels as files.** Market Data saves every raw NSE response as an artifact. The Analyst's
+  Python tools read those files and write CSVs. Chart Studio turns CSVs into PNGs. The Briefing Writer
+  writes the note once as markdown; `render_note_html` turns it into styled HTML with the PNGs embedded,
+  and `html_to_pdf` makes the PDF.
+- **Deterministic maths.** Returns, relative strength, quadrants and breadth regimes are computed by
+  the `nse_analytics` Python toolset, unit-tested on recorded NSE responses. The LLM decides what to
+  fetch and how to explain it, never the arithmetic.
 - **No sector data in NSE MCP.** `toolsets/nse_analytics/src/src/nse_analytics/data/nifty50_sectors.csv`
-  maps the official NIFTY 50 list (niftyindices.com, as of 2026-10-05) to 11 desk sectors.
-  Refresh it after each index rebalance.
-- **Static NSE tool list.** The connectors carry NSE's tool definitions as a static manifest,
-  so deploys and restarts never wait on NSE's servers, which often time out. The generator
-  script also rewrites NSE's "call get_corporate_actions first" instructions; followed
-  literally, they add one extra NSE call per stock. The Analyst flags unadjusted-price
-  distortions instead.
-- **Resilience.** NSE's MCP servers intermittently hang or return 504. The Market Data agent
-  retries each failed call up to 3 times and runs independent calls in parallel.
+  maps the official NIFTY 50 list (niftyindices.com, as of 2026-10-05) to 11 sectors. Refresh it after
+  each index rebalance.
+- **A static NSE tool list.** The connectors carry NSE's tool definitions as a built-in manifest, so
+  applying and restarting never wait on NSE's servers, which often time out. The generator script also
+  rewrites NSE's "call get_corporate_actions first" instructions; followed literally they add one NSE call
+  per stock, so the Analyst flags unadjusted-price distortions instead.
 
 ## Repo layout
 
 | Path | What it is |
 |---|---|
-| `manifest.yaml` | Every declarative resource (`sam config plan/apply`) |
-| `models/` | `nse_sonnet` for the desk + the instance's `general` / `planning`, all from `.env` |
+| `manifest.yaml` | Every declarative resource (`sam config plan` / `apply`) |
+| `manifests/builtin-models.yaml` | Optional: points SAM's own `general` / `planning` models at your LLM |
+| `models/` | The model definitions, filled in from `.env` |
 | `connectors/` | The two NSE MCP servers, with a static tool manifest (generated) |
 | `agents/` | The five agents |
-| `skills/` | Methodology, chart styles and briefing templates (loaded on demand) |
-| `toolsets/nse_analytics/` | Python analytics + unit tests on recorded NSE responses |
-| `toolsets/nse_publishing/` | Markdown note to print-ready HTML with charts inlined |
-| `instance/` | The chat project and scheduled tasks (applied by `bootstrap.py` via `sam api`) |
-| `scripts/bootstrap.py` | Configure a SAM instance end to end with the `sam` CLI |
-| `scripts/sam-desktop.sh` | macOS: switch SAM Desktop between the NSE instance and your default one |
+| `skills/` | Methodology, chart styles and briefing templates, loaded by agents on demand |
+| `toolsets/nse_analytics/` | Python analytics, with unit tests on recorded NSE responses |
+| `toolsets/nse_publishing/` | Markdown note to print-ready HTML with charts embedded |
+| `instance/` | The chat project and scheduled tasks, applied by `bootstrap.py` |
+| `scripts/bootstrap.py` | Sets up a SAM instance end to end with the `sam` CLI |
+| `scripts/sam-desktop.sh` | macOS, optional: run the desk in its own SAM home |
 | `scripts/refresh_nse_connectors.py` | Regenerates `connectors/*.yaml` from NSE's `tools/list` |
 
-## Working with the instance
+## Optional: keep the desk in its own SAM home
+
+SAM keeps everything (agents, models, chats, files, logs) in a *home* directory. If you already use SAM
+for other projects and want to keep the desk separate, run the desk from its own home. On macOS:
 
 ```bash
-scripts/sam-desktop.sh status     # which SAM instance is running
-scripts/sam-desktop.sh default    # back to your usual SAM instance
-scripts/sam-desktop.sh nse        # back to the desk
+scripts/sam-desktop.sh nse        # quits SAM and relaunches it with SAM_HOME=~/sam-homes/nse-desk
+python3 scripts/bootstrap.py
+scripts/sam-desktop.sh default    # back to your usual instance (also: scripts/sam-desktop.sh status)
 ```
 
-Opening SAM from the Dock or Start menu launches your *default* instance, not the desk.
-Use `scripts/sam-desktop.sh nse` (or your own `SAM_HOME` launch) to get the desk.
+On Windows or Linux, set the environment variable `SAM_HOME` to a new empty folder before starting SAM
+Desktop, and set the same `SAM_HOME` in the terminal where you run `sam` and `bootstrap.py`.
 
-For other `sam` commands, point the CLI at the desk's home first:
+Opening SAM from the Dock or Start menu always launches your default home. For `sam` commands against
+a separate home, `export SAM_HOME=~/sam-homes/nse-desk` first. SAM re-creates its built-in Activity
+Monitor agent at every start; to keep it off, launch with `NSE_FEATURE_FLAGS=SAM_FEATURE_ACTIVITY_MONITOR=false scripts/sam-desktop.sh nse`
+(it also powers SAM's Activities page).
 
-```bash
-export SAM_HOME=~/sam-homes/nse-desk
-sam config plan --target desktop -v          # read the diff before any apply
-sam task send "Live quote for RELIANCE" -a nse_market_data
-```
-
-- After you edit any YAML, re-run `scripts/bootstrap.py` (or `sam config apply --target desktop`).
-- `apply` never deletes anything unless you pass `--prune`; you shouldn't need it.
-- `plan` should show `0 delete` everywhere. A few agents always show `update`: a known
-  read-back quirk for `skillRefs` and pass-through `additionalConfigurations` keys. It is harmless.
-- Optional, for AI-assisted editing of the config: `sam ai-assistance skill install` writes
-  SAM's authoring skills into `.claude/skills/` (gitignored).
-
-### Tests
+## Tests and maintenance
 
 ```bash
 sam toolset validate nse_analytics && sam toolset validate nse_publishing
@@ -207,55 +277,42 @@ sam toolset validate nse_analytics && sam toolset validate nse_publishing
 (cd toolsets/nse_publishing/src && python3 -m unittest discover -s tests)
 ```
 
-The publishing tests use the `markdown` package from the bundle that `sam toolset validate`
-builds, so run validate first.
+The publishing tests use the `markdown` package from the bundle that `sam toolset validate` builds,
+so run validate first.
 
-### Refresh the NSE connectors
+To refresh the NSE connectors after NSE changes its tools:
 
 ```bash
 python3 scripts/refresh_nse_connectors.py            # live fetch from NSE (retries built in)
 python3 scripts/refresh_nse_connectors.py --offline  # rebuild from scripts/nse_tools/
-scripts/bootstrap.py
+python3 scripts/bootstrap.py
 ```
 
-## Demo script (~10 minutes; nothing is built live)
-
-| # | Prompt (welcome buttons) | What it shows |
-|---|---|---|
-| 1 | How's the market right now? | Desk Head → Market Data + Analyst, live NSE MCP |
-| 2 | Compare HDFC Bank, ICICI Bank and Kotak Mahindra Bank over 6 months, with a chart. | Artifact hand-off from Market Data to Chart Studio |
-| 3 | Which NIFTY 50 sectors are leading over 1 month vs 3 months? Show the rotation chart. | Peer-to-peer delegation, parallel NSE calls, Python tool, chart |
-| 4 | Write tomorrow's pre-market note. | The deepest chain, ending in a PDF |
-| 5 | Open **Schedules** and show the last EOD wrap run | Autonomous, scheduled agents |
-
-Prompt 4 takes ~6 minutes: start it, then talk through the Activity panel while it runs,
-or open the PDF from your rehearsal session. Close by opening `agents/nse_desk_head.yaml`:
-it names its peers in an allow list and nothing else. No endpoints, no wiring.
-
-**Before the demo:**
-- `scripts/sam-desktop.sh status` shows the NSE instance; `plan` shows no unexpected drift.
-- Rehearse the full script about an hour before and keep that chat session open as a backup
-  (NSE's servers can add a minute on a slow day).
+For AI-assisted editing of the config, `sam ai-assistance skill install` writes SAM's authoring skills
+into `.claude/skills/` (gitignored).
 
 ## Troubleshooting
 
 | Symptom | Cause / fix |
 |---|---|
-| `bootstrap.py` refuses to run | The running SAM isn't the NSE instance: `scripts/sam-desktop.sh nse`, or pass `--use-running-instance` |
-| `sam config plan` complains about an unresolved variable | `.env` is missing one of the `LLM_*` variables (run from the repo root) |
-| Agents answer "LLM error" / 401 | Wrong `LLM_API_BASE`, `LLM_API_KEY` or `LLM_MODEL_NAME`; fix `.env` and re-run `bootstrap.py` |
-| Market Data says NSE tools aren't connected | Look for `invalid mcp tool config` in the log; regenerate connectors with the refresh script |
-| Toolset build fails during apply | Needs `python3` 3.10+ with `pip` on `PATH`; try `sam toolset validate nse_analytics` for details |
-| PDF shows broken chart images | The Briefing Writer must use `render_note_html` (it inlines the PNGs); `html_to_pdf` doesn't resolve SAM embeds |
-| A tool fails with `takes 0 positional arguments` | Every `nse_analytics` / `nse_publishing` tool needs a `ctx: SandboxToolContextFacade` parameter |
-| SAM's Orchestrator / Activity Monitor reappear | They are re-seeded in a brand-new home, and the Activity Monitor at every start unless its feature is off; re-run `bootstrap.py --remove-builtins` |
-| Logs | `<SAM_HOME>/diagnostics/logs/desktop.log` (`~/sam-homes/nse-desk/...` for the desk) |
+| `sam: command not found` | The CLI isn't on your `PATH`. Add it and open a new terminal; check `sam --version` |
+| `bootstrap.py`: "No .env file found" or "placeholder values" | Copy `.env.example` to `.env` and put in your real endpoint, model and key (step 3) |
+| `bootstrap.py`: "SAM Desktop is not running" / "Could not reach SAM Desktop" | Start the app and wait for its chat screen. If you launched it with a custom `SAM_HOME`, export the same one in your terminal |
+| `sam config plan` says an environment variable is unresolved | `.env` is missing a variable, or you ran from outside the repo folder (the CLI reads `.env` from the repo) |
+| Agents reply with an LLM error, or "Budget has been exceeded" / 401 / 429 | A problem on the LLM side: check `LLM_API_KEY`, `LLM_API_BASE`, `LLM_MODEL_NAME` and your key's quota, then re-run `bootstrap.py` |
+| Toolset build fails during apply | Needs `python3` 3.10+ with `pip` on your `PATH` and internet access. `sam toolset validate nse_analytics` shows the details |
+| Market Data says NSE tools aren't connected | Look for `invalid mcp tool config` in the SAM log; regenerate the connectors with `scripts/refresh_nse_connectors.py` |
+| NSE answers are slow or fail | NSE's MCP servers intermittently hang or return 504. The agent retries; ask again in a minute |
+| Scheduled tasks never run | They're created switched off. Use `--enable-schedules` or the Schedules page |
+| PDF shows broken chart images | The Briefing Writer must use `render_note_html`, which embeds the PNGs; `html_to_pdf` doesn't resolve SAM's embeds on its own |
+| Where are the logs? | `desktop.log` under `<SAM home>/diagnostics/logs/` (macOS default home: `~/Library/Application Support/sam`) |
 
 ## Data and terms
 
-- Data comes from NSE's MCP servers. NSE states it is for informational and educational
-  purposes only: not for real-time trading, commercial deployment or training AI models.
-  Every note the desk writes carries a disclaimer, and nothing here is investment advice.
+- Data comes from NSE's MCP servers. NSE states it is for informational and educational purposes
+  only: not for real-time trading, commercial deployment or training AI models. Every note the desk
+  writes carries a disclaimer, and nothing here is investment advice. This project is not affiliated
+  with or endorsed by NSE.
 - End-of-day prices are not adjusted for splits or bonuses; the Analyst flags implausible moves.
-- The test fixtures under `toolsets/*/src/tests/fixtures/` are small recorded NSE responses,
-  kept only to make the analytics tests reproducible.
+- The files under `toolsets/*/src/tests/fixtures/` and `docs/` are small recorded NSE responses and a
+  chart drawn from them, kept to make the tests reproducible and to illustrate the output.

@@ -1,12 +1,14 @@
 kind: model
 name: general
 description: >-
-  The SAM instance's built-in general model (used by SAM's Builder and chat titles), set to the same LLM as the desk agents so a fresh instance needs no onboarding screen. Configured from .env.
+  SAM's built-in general model (used by SAM's Builder and for chat titles), pointed at the
+  same LLM as the desk. Optional: applied only by manifests/builtin-models.yaml
+  (scripts/bootstrap.py --builtin-models).
 spec:
   alias: general
   provider: ${LLM_PROVIDER, custom}
   modelName: ${LLM_MODEL_NAME}
-  apiBase: ${LLM_API_BASE}
+  apiBase: ${LLM_API_BASE:-}
   authConfig:
     type: apikey
     api_key: ${LLM_API_KEY}

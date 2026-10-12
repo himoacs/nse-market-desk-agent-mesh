@@ -1,28 +1,34 @@
 #!/usr/bin/env bash
-# Switch SAM Desktop between the NSE-only instance and the default one.
+# macOS helper (optional): run the NSE Market Desk in its own SAM home, apart from
+# anything else you have built in SAM Desktop.
 #
-# SAM keeps all state (agents, connectors, models, chats, artifacts, logs) in
-# its home directory. The default home (~/Library/Application Support/sam)
-# holds your other projects; the NSE desk runs from its own home so the two
-# never mix. The app runs one instance at a time (fixed ports 8800/8001), so
-# switching quits the running app and relaunches it with the other home.
+# SAM keeps all state (agents, connectors, models, chats, files, logs) in its home
+# directory. The default home (~/Library/Application Support/sam) is what you get
+# when you open the app normally. This script relaunches the app with a separate
+# home (default ~/sam-homes/nse-desk) so the desk never mixes with your other work.
+# The app runs one instance at a time (fixed ports 8800/8001), so switching quits
+# the running app and relaunches it with the other home.
 #
 # Usage:
-#   scripts/sam-desktop.sh nse       # NSE-only instance (SAM_HOME=$NSE_SAM_HOME)
+#   scripts/sam-desktop.sh nse       # the desk's own instance (SAM_HOME=$NSE_SAM_HOME)
 #   scripts/sam-desktop.sh default   # your usual instance
 #   scripts/sam-desktop.sh status    # which instance is running
 #
-# For sam CLI commands against the NSE instance, point the CLI at the same home:
+# Environment:
+#   NSE_SAM_HOME       home directory for the desk's instance (default ~/sam-homes/nse-desk)
+#   NSE_FEATURE_FLAGS  extra space-separated VAR=value settings passed to the app on launch.
+#                      For a tidy agent list, set SAM_FEATURE_ACTIVITY_MONITOR=false: SAM
+#                      re-creates its built-in Activity Monitor agent at every start unless
+#                      that feature is off (it also powers the Activities page).
+#
+# scripts/bootstrap.py finds the running instance on its own. For other sam commands,
+# point the CLI at the same home:
 #   export SAM_HOME="$HOME/sam-homes/nse-desk"   # or pass --sam-home on each command
 set -euo pipefail
 
 APP="Solace Agent Mesh"
 NSE_SAM_HOME="${NSE_SAM_HOME:-$HOME/sam-homes/nse-desk}"
-# The NSE instance keeps only the desk's own agents plus SAM's Builder. The
-# built-in Orchestrator was deleted once (it is only seeded into an empty
-# database); the Activity Monitor is re-seeded at every start unless its
-# feature is off, so the NSE launch turns it off.
-NSE_FEATURE_FLAGS=(${NSE_FEATURE_FLAGS:-SAM_FEATURE_ACTIVITY_MONITOR=false})
+NSE_FEATURE_FLAGS=(${NSE_FEATURE_FLAGS:-})
 DEFAULT_SAM_HOME="$HOME/Library/Application Support/sam"
 
 running() { pgrep -x sam-desktop >/dev/null 2>&1; }
@@ -63,7 +69,7 @@ case "${1:-status}" in
     for flag in ${NSE_FEATURE_FLAGS[@]+"${NSE_FEATURE_FLAGS[@]}"}; do env_args+=(--env "$flag"); done
     open -n -a "$APP" "${env_args[@]}"
     wait_ready
-    echo "CLI: export SAM_HOME=\"$NSE_SAM_HOME\"   (then: sam config apply --target desktop)"
+    echo "Next: python3 scripts/bootstrap.py   (other sam commands: export SAM_HOME=\"$NSE_SAM_HOME\")"
     ;;
   default)
     quit_app
