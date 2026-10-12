@@ -11,6 +11,11 @@ a pre-market note or end-of-day wrap as a PDF. Each agent is a single YAML file.
 through agent cards on SAM's event broker and delegate over A2A, with no integration code between them.
 
 <p align="center">
+  <img src="docs/sam-first-screen.png" alt="SAM Desktop's first screen with the NSE Market Desk applied: the welcome message, four starter prompt buttons and the nse_desk_head agent selected" width="760"><br>
+  <em>What you see when SAM Desktop opens with the desk applied: a welcome screen, four one-click starter prompts, and the Desk Head ready to chat</em>
+</p>
+
+<p align="center">
   <img src="docs/sector-rotation-example.png" alt="Sector rotation chart drawn by the Chart Studio agent" width="640"><br>
   <em>A chart drawn by the Chart Studio agent (NIFTY 50 sector rotation, data as of 1 Oct 2026)</em>
 </p>
@@ -46,7 +51,8 @@ You ─► nse_desk_head (orchestrator)
    describes it as free for individuals and for companies with under $25M annual revenue, so check the
    page for the current terms.
 2. Install it and start **Solace Agent Mesh** once to make sure it opens. It bundles its own event
-   broker, so there is nothing else to install. Its web UI is served at `http://127.0.0.1:8800`.
+   broker, so there is nothing else to install. The app window is the chat UI; the `sam` CLI talks to the
+   app's local API on port 8800.
 3. The download also includes the **`sam` command-line tool**, which this repo uses for all setup.
    Put it on your `PATH` and check that it works:
 
@@ -164,7 +170,7 @@ repo. `apply` never deletes anything unless you pass `--prune`, which you should
 ### 5. Try the sample prompts
 
 In SAM Desktop, open **Projects → NSE Market Desk** and start a chat. The Desk Head is the default
-agent, and its welcome screen has one-click buttons for several of the prompts below. If you start a
+agent, and its welcome screen (the screenshot at the top of this page) has one-click buttons for several of the prompts below. If you start a
 plain **New Chat** instead, pick `nse_desk_head` from the agent menu.
 
 Start with the quick ones, then work up:
